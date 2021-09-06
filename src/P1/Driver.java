@@ -14,7 +14,7 @@ public class Driver {
             ResultSet rs = myStmt.executeQuery("SELECT * FROM reiziger");
 
             while ((rs.next())){
-                System.out.println(rs.getString("reiziger_id") + ", " + rs.getString("voorletters")
+                System.out.println("#"+ rs.getString("reiziger_id") + ", " + rs.getString("voorletters")
                         + ", " + rs.getString("achternaam") + ", " + rs.getString("geboortedatum"));
             }
 

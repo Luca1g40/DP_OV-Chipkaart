@@ -15,18 +15,27 @@ public class ReizigerDAOPsql implements ReizigerDAO{
 
     @Override
     public boolean saveReiziger(Reiziger reiziger) {
-//        try {
-//            int id = reiziger.getId();
-//            String naam = reiziger.getVoorletters();
-//            String tussenvoegsel = reiziger.getTussenvoegsel();
-//            String achternaam = reiziger.getAchternaam();
-//            LocalDate geboortedatum = reiziger.getGeboortedatum();
-//            Statement myStmt = connection.createStatement();
-//            ResultSet rs = myStmt.executeQuery("INSERT INTO reiziger (reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum)" +
-//                    "VALUES " + id, naam, tussenvoegsel, achternaam, geboortedatum );
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
+        try {
+            int id = reiziger.getId();
+            String naam = reiziger.getVoorletters();
+            String tussenvoegsel = reiziger.getTussenvoegsel();
+            String achternaam = reiziger.getAchternaam();
+            Date geboortedatum = reiziger.getGeboortedatum();
+            String q = ("INSERT INTO reiziger" +
+                    " (voorletters, tussenvoegsel, achternaam, geboortedatum, reiziger_id)" +
+                    "VALUES (?, ?, ? , ? , ?)");
+
+            PreparedStatement pst = connection.prepareStatement(q);
+            pst.setString(1,naam);
+            pst.setString(2, tussenvoegsel);
+            pst.setString(3, achternaam);
+            pst.setDate(4, geboortedatum);
+            pst.setInt(5, id);
+            pst.execute();
+            pst.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         // Maak een SQL query aan de hand van Object
         // exectute query
@@ -40,19 +49,22 @@ public class ReizigerDAOPsql implements ReizigerDAO{
             String naam = reiziger.getVoorletters();
             String tussenvoegsel = reiziger.getTussenvoegsel();
             String achternaam = reiziger.getAchternaam();
-            LocalDate geboortedatum = reiziger.getGeboortedatum();
+            Date geboortedatum = reiziger.getGeboortedatum();
 
 
-            String q = "UPDATE reiziger SET voorletters = ? tussenvoegsel = ? achternaam = ? geboortedatum = ? reiziger_id = ?  WHERE id = ?";
+            String q = "UPDATE reiziger SET " +
+                    "voorletters = ?, tussenvoegsel = ?, achternaam = ?, geboortedatum = ?, reiziger_id = ? " +
+                    "WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setString(1,naam);
             pst.setString(2, tussenvoegsel);
             pst.setString(3, achternaam);
-            pst.setDate(4, Date.valueOf(geboortedatum));
+            pst.setDate(4, geboortedatum);
             pst.setInt(5, id);
             pst.setInt(6,id);
             pst.execute();
             pst.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -63,10 +75,14 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     public boolean deleteReiziger(Reiziger reiziger) {
         try {
             int id = reiziger.getId();
-            Statement myStmt = connection.createStatement();
-            ResultSet rs = myStmt.executeQuery("DELETE FROM reiziger WHERE id IS " +id);
-            rs.close();
-            myStmt.close();
+
+            String q = "DELETE FROM reiziger adres WHERE reiziger_id = ?";
+            PreparedStatement pst = connection.prepareStatement(q);
+            pst.setInt(1,id);
+            pst.execute();
+            pst.close();
+
+
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -85,7 +101,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                 String naam = rs.getString("voorletters");
                 String achternaam = rs.getString("achternaam");
                 String tussenvoegsel = rs.getString("tussenvoegsel");
-                LocalDate geboortedatum = rs.getDate("geboortedatum").toLocalDate();
+                Date geboortedatum = rs.getDate("geboortedatum");
                 int reizigerid = rs.getInt("reiziger_id");
                 reizigers.add(new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum));
             }

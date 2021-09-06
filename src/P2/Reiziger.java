@@ -1,17 +1,18 @@
 package P2;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Reiziger {
 
     private int id;
     private String voorletters;
-    private String achternaam;
     private String tussenvoegsel;
-    private LocalDate geboortedatum;
+    private String achternaam;
+    private Date geboortedatum;
 
 
-    public Reiziger(int id, String voorletters, String achternaam, String tussenvoegsel, LocalDate geboortedatum) {
+    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam,  Date geboortedatum) {
         this.id = id;
         this.voorletters = voorletters;
         this.achternaam = achternaam;
@@ -51,11 +52,11 @@ public class Reiziger {
         this.tussenvoegsel = tussenvoegsel;
     }
 
-    public LocalDate getGeboortedatum() {
+    public Date getGeboortedatum() {
         return geboortedatum;
     }
 
-    public void setGeboortedatum(LocalDate geboortedatum) {
+    public void setGeboortedatum(Date geboortedatum) {
         this.geboortedatum = geboortedatum;
     }
 
