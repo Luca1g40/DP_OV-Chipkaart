@@ -1,5 +1,7 @@
 package P2;
 
+import P3.Adres;
+
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -10,6 +12,7 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private Date geboortedatum;
+    private Adres adres;
 
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam,  Date geboortedatum) {
@@ -19,6 +22,7 @@ public class Reiziger {
         this.tussenvoegsel = tussenvoegsel;
         this.geboortedatum = geboortedatum;
     }
+
 
     public int getId() {
         return id;

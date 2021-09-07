@@ -1,5 +1,7 @@
 package P2;
 
+import P3.AdresDAO;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.ArrayList;
 public class ReizigerDAOPsql implements ReizigerDAO{
 
     private Connection connection;
+    private AdresDAO adao;
 
     public ReizigerDAOPsql(Connection connection){
         this.connection = connection;
@@ -36,9 +39,6 @@ public class ReizigerDAOPsql implements ReizigerDAO{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-        // Maak een SQL query aan de hand van Object
-        // exectute query
         return false;
     }
 
@@ -74,11 +74,10 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     @Override
     public boolean deleteReiziger(Reiziger reiziger) {
         try {
-            int id = reiziger.getId();
 
             String q = "DELETE FROM reiziger adres WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
-            pst.setInt(1,id);
+            pst.setInt(1, reiziger.getId());
             pst.execute();
             pst.close();
 
@@ -97,7 +96,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
             ResultSet rs = myStmt.executeQuery("SELECT * FROM reiziger");
             ArrayList<Reiziger> reizigers = new ArrayList<>();
 
-            while ((rs.next())){
+            while (rs.next()){
                 String naam = rs.getString("voorletters");
                 String achternaam = rs.getString("achternaam");
                 String tussenvoegsel = rs.getString("tussenvoegsel");
