@@ -4,6 +4,7 @@ import P2.Reiziger;
 import P2.ReizigerDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AdresDAOPsql implements AdresDAO{
 
@@ -27,7 +28,7 @@ public class AdresDAOPsql implements AdresDAO{
             pst.setString(3, adres.getHuisnummer());
             pst.setString(4, adres.getStraat());
             pst.setString(5, adres.getWoonplaats());
-            pst.setInt(6,adres.getReiziger_id());
+            pst.setInt(6,adres.getReiziger().getId());
             pst.execute();
             pst.close();
         } catch (SQLException throwables) {
@@ -48,7 +49,7 @@ public class AdresDAOPsql implements AdresDAO{
             pst.setString(3, adres.getHuisnummer());
             pst.setString(4, adres.getStraat());
             pst.setString(5, adres.getWoonplaats());
-            pst.setInt(6,adres.getReiziger_id());
+            pst.setInt(6,adres.getReiziger().getId());
             pst.execute();
             pst.close();
 
@@ -64,7 +65,7 @@ public class AdresDAOPsql implements AdresDAO{
 
             String q = "DELETE FROM adres reiziger WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
-            pst.setInt(1,adres.getReiziger_id());
+            pst.setInt(1,adres.getReiziger().getId());
             pst.execute();
             pst.close();
 
@@ -81,7 +82,7 @@ public class AdresDAOPsql implements AdresDAO{
         try {
             String q = "SELECT * FROM adres JOIN reiziger ON reiziger.reiziger_id = adres.reiziger_id WHERE reiziger.reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
-            pst.setInt(1,adres.getReiziger_id());
+            pst.setInt(1,adres.getReiziger().getId());
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -98,16 +99,17 @@ public class AdresDAOPsql implements AdresDAO{
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1,reiziger.getId());
             ResultSet rs = pst.executeQuery();
-            rs.next();
+
             int adres_id = rs.getInt(1);
             String postcode = rs.getString(2);
             String huisnummer = rs.getString(3);
             String straat = rs.getString(4);
             String woonplaats = rs.getString(5);
-            int reiziger_id = rs.getInt(6);
-            Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id);
+            Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger);
+
             pst.close();
             return adres;
+
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();

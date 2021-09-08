@@ -23,6 +23,18 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
+    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam,  Date geboortedatum, Adres adres){
+        this(id, voorletters, tussenvoegsel, achternaam, geboortedatum);
+        this.adres = adres;
+    }
+
+    public Adres getAdres() {
+        return adres;
+    }
+
+    public void setAdres(Adres adres) {
+        this.adres = adres;
+    }
 
     public int getId() {
         return id;
@@ -66,6 +78,6 @@ public class Reiziger {
 
     public String toString(){
         return "P2.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
-                + " geboortedatum " + geboortedatum;
+                + " geboortedatum " + geboortedatum + " " + adres;
     }
 }

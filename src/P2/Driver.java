@@ -50,6 +50,5 @@ public class Driver {
         rdp.deleteReiziger(sietske);
         reizigers = rdp.findAll();
         System.out.println("aantal na het aanroepen " + reizigers.size());
-        // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
     }
 }
