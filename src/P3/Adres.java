@@ -18,6 +18,7 @@ public class Adres {
         this.straat = straat;
         this.woonplaats = woonplaats;
         this.reiziger = reiziger;
+        reiziger.setAdres(this);
 //        this.reiziger_id = reiziger_id;
     }
 

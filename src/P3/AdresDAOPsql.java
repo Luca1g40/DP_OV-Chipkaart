@@ -37,6 +37,48 @@ public class AdresDAOPsql implements AdresDAO{
         return false;
     }
 
+    public ArrayList<Adres> findAllAdressen() {
+        try{
+            String q = "SELECT * FROM adres";
+            PreparedStatement ps = connection.prepareStatement(q);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Adres> adressen = new ArrayList<>();
+
+            while (rs.next()){
+                int adres_id = rs.getInt("adres_id");
+                String postcode = rs.getString("postcode");
+                String huisnummer = rs.getString("huisnummer");
+                String straat = rs.getString("straat");
+                String woonplaats = rs.getString("woonplaats");
+                int reiziger_id = rs.getInt("reiziger_id");
+
+                String rq = "SELECT * FROM reiziger WHERE reiziger_id = ?";
+                PreparedStatement rps = connection.prepareStatement(rq);
+                rps.setInt(1, reiziger_id);
+                ResultSet rrs = rps.executeQuery();
+                while (rrs.next()){
+                    String naam = rrs.getString("voorletters");
+                    String achternaam = rrs.getString("achternaam");
+                    String tussenvoegsel = rrs.getString("tussenvoegsel");
+                    Date geboortedatum = rrs.getDate("geboortedatum");
+                    int reizigerid = rrs.getInt("reiziger_id");
+                    Reiziger reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+                    adressen.add(new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger));
+                }
+                rps.close();
+                rrs.close();
+            }
+            ps.close();
+            rs.close();
+
+            return adressen;
+        }
+        catch (Exception exc){
+            System.out.println(exc);
+        }
+        return null;
+    }
+
     @Override
     public boolean updateAdres(Adres adres) {
         try {
@@ -77,42 +119,41 @@ public class AdresDAOPsql implements AdresDAO{
         }
     }
 
-    @Override
-    public Adres findById(Adres adres) {
-        try {
-            String q = "SELECT * FROM adres JOIN reiziger ON reiziger.reiziger_id = adres.reiziger_id WHERE reiziger.reiziger_id = ?";
-            PreparedStatement pst = connection.prepareStatement(q);
-            pst.setInt(1,adres.getReiziger().getId());
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return null;
-        }
-
-        return null;
-    }
+//    @Override
+//    public Adres findById(Adres adres) {
+//        try {
+//            String q = "SELECT * FROM adres JOIN reiziger ON reiziger.reiziger_id = adres.reiziger_id WHERE reiziger.reiziger_id = ?";
+//            PreparedStatement pst = connection.prepareStatement(q);
+//            pst.setInt(1,adres.getReiziger().getId());
+//        }
+//        catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//            return null;
+//        }
+//
+//        return null;
+//    }
 
     @Override
     public Adres findByReiziger(Reiziger reiziger) {
         try {
-            String q = "SELECT * FROM adres JOIN reiziger ON reiziger.reiziger_id = adres.reiziger_id WHERE reiziger.reiziger_id = ?";
+            String q = "SELECT * FROM adres WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1,reiziger.getId());
             ResultSet rs = pst.executeQuery();
 
-            int adres_id = rs.getInt(1);
-            String postcode = rs.getString(2);
-            String huisnummer = rs.getString(3);
-            String straat = rs.getString(4);
-            String woonplaats = rs.getString(5);
+            rs.next();
+            int adres_id = rs.getInt("adres_id");
+            String postcode = rs.getString("postcode");
+            String huisnummer = rs.getString("huisnummer");
+            String straat = rs.getString("straat");
+            String woonplaats = rs.getString("woonplaats");
             Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger);
-
             pst.close();
             return adres;
 
         }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
+        catch (SQLException ignored) {
             return null;
         }
     }

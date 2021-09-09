@@ -3,6 +3,8 @@ package P3;
 import P2.Reiziger;
 import P2.ReizigerDAO;
 
+import java.util.ArrayList;
+
 public interface AdresDAO {
 
 
@@ -12,8 +14,10 @@ public interface AdresDAO {
 
     public boolean deleteAdres(Adres adres);
 
-    public Adres findById(Adres adres);
+//    public Adres findById(Adres adres);
 
     public Adres findByReiziger(Reiziger reiziger);
+
+    public ArrayList<Adres> findAllAdressen();
 
 }
