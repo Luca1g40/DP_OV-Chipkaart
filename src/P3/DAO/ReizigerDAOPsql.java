@@ -39,10 +39,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pst.setInt(5, id);
             pst.execute();
             pst.close();
-            Adres adres = adao.findByReiziger(reiziger);
-            if (adres != null){
-                adao.saveAdres(adres);
-            }
+            adao.saveAdres(reiziger.getAdres());
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -118,7 +116,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                 String tussenvoegsel = rs.getString("tussenvoegsel");
                 Date geboortedatum = rs.getDate("geboortedatum");
                 int reizigerid = rs.getInt("reiziger_id");
-                Reiziger reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+                Reiziger reiziger = new Reiziger(reizigerid, naam, tussenvoegsel, achternaam, geboortedatum);
                 reiziger.setAdres(adao.findByReiziger(reiziger));
                 reizigers.add(reiziger);
 

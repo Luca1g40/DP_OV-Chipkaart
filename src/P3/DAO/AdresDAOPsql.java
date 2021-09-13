@@ -83,21 +83,6 @@ public class AdresDAOPsql implements AdresDAO{
     }
 
     @Override
-    public Adres findById(Adres adres) {
-        try {
-            String q = "SELECT * FROM adres JOIN reiziger ON reiziger.reiziger_id = adres.reiziger_id WHERE reiziger.reiziger_id = ?";
-            PreparedStatement pst = connection.prepareStatement(q);
-            pst.setInt(1,adres.getReiziger().getId());
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return null;
-        }
-
-        return null;
-    }
-
-    @Override
     public Adres findByReiziger(Reiziger reiziger) {
         try {
             String q = "SELECT * FROM adres WHERE reiziger_id = ?";

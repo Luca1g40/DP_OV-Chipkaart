@@ -22,36 +22,59 @@ public class Driver {
         adp.setRdao(rdp);
         rdp.setAdao(adp);
 
+        String gbdatum = "2000-01-01";
+        Reiziger r1 = new Reiziger(10, "Test", "van", "Tester", java.sql.Date.valueOf(gbdatum));
+        Adres a1 = new Adres(10, "1234AA", "123", "Teststraat", "Teststad", r1);
 
-        String gbdatum = "1993-03-27";
 
-        Reiziger r1 = new Reiziger(7, "L", "", "Fransen", java.sql.Date.valueOf(gbdatum));
-        Adres a1 = new Adres(7, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
-        Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
-        rdp.saveReiziger(r1);
-        adp.saveAdres(a1);
-        a1.setHuisnummer("135A");
-        adp.updateAdres(a1);
-        adp.deleteAdres(a1);
-
+        System.out.println("[Test] ReizigerDAO.saveReiziger() Save reiziger");
+        System.out.println("Voor het opslaan van de nieuwe reiziger");
         ArrayList<Reiziger> reizigers = rdp.findAll();
         for (Reiziger reiziger : reizigers){
             System.out.println(reiziger);
         }
+        rdp.saveReiziger(r1);
+        System.out.println();
+
+        ArrayList<Reiziger> reizigers1 = rdp.findAll();
+        for (Reiziger reiziger : reizigers1){
+            System.out.println(reiziger);
+        }
+
+        System.out.println();
+        ArrayList<Adres> adressen = adp.findAll();
+        for (Adres adres : adressen){
+            System.out.println(adres);
+        }
+
+        System.out.println();
+        System.out.println("[Test] ReizigerDAO.updateReiziger() update naam van de reiziger met adres");
+        r1.setVoorletters("Nieuw");
+        rdp.updateReiziger(r1);
+        System.out.println(rdp.findById(10));
+
+        System.out.println();
+        System.out.println("[Test] adresDAO.findByReiziger() ");
+        System.out.println(adp.findByReiziger(r1));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findById() find reiziger by id");
-        System.out.println(rdp.findById(1));
+        System.out.println("reiziger met reiziger id 2 ophalen.");
+        System.out.println(rdp.findById(2));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findByGbDatum() find by geboortedatum");
-        System.out.println(rdp.findByGbDatum("2002-09-17"));
+        System.out.println("Reiziger met geboortedatum 1998-08-11 ophalen");
+        System.out.println(rdp.findByGbDatum("1998-08-11"));
 
         System.out.println();
-        System.out.println("[Test] ReizigerDAO.deleteReiziger() delete reiziger L Fransen");
-        System.out.println(rdp.findAll().size());
+        System.out.println("[Test] ReizigerDAO.deleteReiziger() delete " + r1);
+        System.out.println("Lengte van de lijst voor het verwijderen: " + rdp.findAll().size());
         rdp.deleteReiziger(r1);
-        System.out.println(rdp.findAll().size());
+        System.out.println("Lengte van de lijst na het verwijderen: " + rdp.findAll().size());
+
+
+
 
 
 

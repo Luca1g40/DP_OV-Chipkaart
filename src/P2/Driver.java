@@ -5,6 +5,7 @@ import P2.DAO.ReizigerDAO;
 import P2.DAO.ReizigerDAOPsql;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Driver {
@@ -53,12 +54,15 @@ public class Driver {
         System.out.println("aantal na het aanroepen " + reizigers.size());
         System.out.println();
 
-        System.out.println("[Test] ReizigerDAO.findById(7)");
-        System.out.println(rdp.findById(7));
+        System.out.println("[Test] ReizigerDAO.findById(1)");
+        System.out.println(rdp.findById(1));
         System.out.println();
 
         System.out.println("[Test] ReizigerDAO.findByGbDatum()");
-        System.out.println(rdp.findByGbDatum("1993-03-27"));
+        ArrayList<Reiziger> geboorteReiziger = rdp.findByGbDatum("1993-03-27");
+        for (Reiziger reiziger : geboorteReiziger){
+            System.out.println(reiziger);
+        }
 
 
     }

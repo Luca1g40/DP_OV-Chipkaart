@@ -123,15 +123,17 @@ public class ReizigerDAOPsql implements ReizigerDAO{
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
+            Reiziger reiziger = null;
 
-            rs.next();
-            String naam = rs.getString("voorletters");
-            String achternaam = rs.getString("achternaam");
-            String tussenvoegsel = rs.getString("tussenvoegsel");
-            Date geboortedatum = rs.getDate("geboortedatum");
-            int reizigerid = rs.getInt("reiziger_id");
-            Reiziger reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
-
+            while(rs.next()) {
+                String naam = rs.getString("voorletters");
+                String achternaam = rs.getString("achternaam");
+                String tussenvoegsel = rs.getString("tussenvoegsel");
+                Date geboortedatum = rs.getDate("geboortedatum");
+                int reizigerid = rs.getInt("reiziger_id");
+                reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+            }
+            rs.close();
             pst.close();
             return reiziger;
 

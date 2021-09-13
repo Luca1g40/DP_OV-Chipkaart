@@ -68,16 +68,26 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
-
-
     public String toString(){
         if (adres == null){
-            return "P2.Domain.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
+            if (tussenvoegsel == null){
+            return "P2.Domain.Reiziger " + voorletters + " " + achternaam + " met reizigers id: " +  id
                     + " geboortedatum " + geboortedatum;
         }
+            else {
+                return "P2.Domain.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
+                        + " geboortedatum " + geboortedatum;
+            }
+        }
         else {
-        return "P2.Domain.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
-                + " geboortedatum " + geboortedatum + " " + adres;
+            if (tussenvoegsel == null){
+                return "P2.Domain.Reiziger " + voorletters + " " + achternaam + " met reizigers id: " +  id
+                        + " geboortedatum " + geboortedatum + " Adres: " + adres;
+            }
+            else {
+                 return "P2.Domain.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
+                    + " geboortedatum " + geboortedatum + " Adres: " + adres;
+            }
         }
     }
 }
