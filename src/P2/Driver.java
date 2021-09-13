@@ -1,10 +1,11 @@
 package P2;
 
-import java.security.spec.ECField;
+import P2.Domain.Reiziger;
+import P2.DAO.ReizigerDAO;
+import P2.DAO.ReizigerDAOPsql;
+
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Properties;
 
 public class Driver {
 
@@ -27,7 +28,7 @@ public class Driver {
         }
         System.out.println();
 
-        // Maak een nieuwe reiziger aan en persisteer deze in de database
+//         Maak een nieuwe reiziger aan en persisteer deze in de database
         String gbdatum = "1981-03-14";
         Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
         System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
@@ -50,5 +51,15 @@ public class Driver {
         rdp.deleteReiziger(sietske);
         reizigers = rdp.findAll();
         System.out.println("aantal na het aanroepen " + reizigers.size());
+        System.out.println();
+
+        System.out.println("[Test] ReizigerDAO.findById(7)");
+        System.out.println(rdp.findById(7));
+        System.out.println();
+
+        System.out.println("[Test] ReizigerDAO.findByGbDatum()");
+        System.out.println(rdp.findByGbDatum("1993-03-27"));
+
+
     }
 }

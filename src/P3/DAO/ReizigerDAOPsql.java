@@ -1,12 +1,12 @@
-package P2;
+package P3.DAO;
 
-import P3.AdresDAO;
+import P3.Domain.Reiziger;
+import P3.Domain.Adres;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ReizigerDAOPsql implements ReizigerDAO{
+public class ReizigerDAOPsql implements ReizigerDAO {
 
     private Connection connection;
     private AdresDAO adao;
@@ -15,9 +15,12 @@ public class ReizigerDAOPsql implements ReizigerDAO{
         this.connection = connection;
     }
 
+    public void setAdao(AdresDAO adao) {
+        this.adao = adao;
+    }
 
     @Override
-    public boolean saveReiziger(Reiziger reiziger) {
+    public boolean saveReiziger(Reiziger reiziger) throws SQLException{
         try {
             int id = reiziger.getId();
             String naam = reiziger.getVoorletters();
@@ -36,6 +39,10 @@ public class ReizigerDAOPsql implements ReizigerDAO{
             pst.setInt(5, id);
             pst.execute();
             pst.close();
+            Adres adres = adao.findByReiziger(reiziger);
+            if (adres != null){
+                adao.saveAdres(adres);
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -43,7 +50,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     }
 
     @Override
-    public boolean updateReiziger(Reiziger reiziger) {
+    public boolean updateReiziger(Reiziger reiziger) throws SQLException{
         try {
             int id = reiziger.getId();
             String naam = reiziger.getVoorletters();
@@ -62,6 +69,11 @@ public class ReizigerDAOPsql implements ReizigerDAO{
             pst.setDate(4, geboortedatum);
             pst.setInt(5, id);
             pst.setInt(6,id);
+            Adres adres = adao.findByReiziger(reiziger);
+            if(adres != null){
+                adao.updateAdres(adres);
+            }
+
             pst.execute();
             pst.close();
 
@@ -72,12 +84,16 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     }
 
     @Override
-    public boolean deleteReiziger(Reiziger reiziger) {
+    public boolean deleteReiziger(Reiziger reiziger) throws SQLException{
         try {
 
             String q = "DELETE FROM reiziger adres WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1, reiziger.getId());
+            Adres adres = adao.findByReiziger(reiziger);
+            if (adres != null){
+                adao.deleteAdres(adres);
+            }
             pst.execute();
             pst.close();
 
@@ -90,7 +106,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     }
 
     @Override
-    public ArrayList<Reiziger> findAll() {
+    public ArrayList<Reiziger> findAll() throws SQLException{
         try{
             Statement myStmt = connection.createStatement();
             ResultSet rs = myStmt.executeQuery("SELECT * FROM reiziger");
@@ -102,10 +118,11 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                 String tussenvoegsel = rs.getString("tussenvoegsel");
                 Date geboortedatum = rs.getDate("geboortedatum");
                 int reizigerid = rs.getInt("reiziger_id");
-                reizigers.add(new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum));
+                Reiziger reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+                reiziger.setAdres(adao.findByReiziger(reiziger));
+                reizigers.add(reiziger);
+
             }
-
-
             rs.close();
             myStmt.close();
             return reizigers;
@@ -115,5 +132,63 @@ public class ReizigerDAOPsql implements ReizigerDAO{
         }
         return null;
     }
+
+    @Override
+    public Reiziger findById(int id) throws SQLException {
+        try {
+            String q = "SELECT * FROM reiziger adres WHERE reiziger_id = ?";
+            PreparedStatement pst = connection.prepareStatement(q);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            Reiziger reiziger = null;
+
+            while (rs.next()) {
+                String naam = rs.getString("voorletters");
+                String achternaam = rs.getString("achternaam");
+                String tussenvoegsel = rs.getString("tussenvoegsel");
+                Date geboortedatum = rs.getDate("geboortedatum");
+                int reizigerid = rs.getInt("reiziger_id");
+                reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+                reiziger.setAdres(adao.findByReiziger(reiziger));
+            }
+            pst.close();
+            return reiziger;
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Reiziger> findByGbDatum(String datum) throws SQLException {
+        try{
+        String q = "SELECT *  FROM reiziger WHERE geboortedatum = ?";
+        PreparedStatement pst = connection.prepareStatement(q);
+        pst.setDate(1, Date.valueOf(datum));
+        ResultSet rs = pst.executeQuery();
+        ArrayList<Reiziger> reizigers = new ArrayList<>();
+
+        while (rs.next()) {
+            String naam = rs.getString("voorletters");
+            String achternaam = rs.getString("achternaam");
+            String tussenvoegsel = rs.getString("tussenvoegsel");
+            Date geboortedatum = rs.getDate("geboortedatum");
+            int reizigerid = rs.getInt("reiziger_id");
+            Reiziger reiziger = new Reiziger(reizigerid, naam, tussenvoegsel, achternaam, geboortedatum);
+            reiziger.setAdres(adao.findByReiziger(reiziger));
+            reizigers.add(reiziger);
+
+
+        }
+        return reizigers;
+        }
+
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

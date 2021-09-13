@@ -1,9 +1,6 @@
-package P2;
-
-import P3.Adres;
+package P3.Domain;
 
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class Reiziger {
 
@@ -15,17 +12,12 @@ public class Reiziger {
     private Adres adres;
 
 
-    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam,  Date geboortedatum) {
+    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         this.id = id;
         this.voorletters = voorletters;
         this.achternaam = achternaam;
         this.tussenvoegsel = tussenvoegsel;
         this.geboortedatum = geboortedatum;
-    }
-
-    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam,  Date geboortedatum, Adres adres){
-        this(id, voorletters, tussenvoegsel, achternaam, geboortedatum);
-        this.adres = adres;
     }
 
     public Adres getAdres() {
@@ -76,8 +68,16 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
+
+
     public String toString(){
-        return "P2.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
+        if (adres == null){
+            return "P2.Domain.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
+                    + " geboortedatum " + geboortedatum;
+        }
+        else {
+        return "P2.Domain.Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
                 + " geboortedatum " + geboortedatum + " " + adres;
+        }
     }
 }
