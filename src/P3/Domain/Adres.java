@@ -1,6 +1,5 @@
-package P3;
+package P3.Domain;
 
-import P2.Reiziger;
 
 public class Adres {
     private int adres_id;
@@ -8,7 +7,6 @@ public class Adres {
     private String huisnummer;
     private String straat;
     private String woonplaats;
-//    private int reiziger_id;
     private Reiziger reiziger;
 
     public Adres(int adres_id, String postcode, String huisnummer, String straat, String woonplaats, Reiziger reiziger) {
@@ -18,7 +16,7 @@ public class Adres {
         this.straat = straat;
         this.woonplaats = woonplaats;
         this.reiziger = reiziger;
-//        this.reiziger_id = reiziger_id;
+        reiziger.setAdres(this);
     }
 
     public int getAdres_id() {
@@ -69,7 +67,8 @@ public class Adres {
         this.woonplaats = woonplaats;
     }
 
-    public String toString(){
+
+        public String toString(){
         return "#" + adres_id + " " + postcode + " " + huisnummer;
     }
 }

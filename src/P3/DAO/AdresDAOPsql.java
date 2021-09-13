@@ -1,7 +1,7 @@
-package P3;
+package P3.DAO;
 
-import P2.Reiziger;
-import P2.ReizigerDAO;
+import P3.Domain.Reiziger;
+import P3.Domain.Adres;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,8 +15,13 @@ public class AdresDAOPsql implements AdresDAO{
         this.connection = connection;
     }
 
+    public void setRdao(ReizigerDAO rdao) {
+        this.rdao = rdao;
+    }
+
     @Override
     public boolean saveAdres(Adres adres) {
+
         try {
             String q = ("INSERT INTO adres" +
                     " (adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id)" +
@@ -95,18 +100,20 @@ public class AdresDAOPsql implements AdresDAO{
     @Override
     public Adres findByReiziger(Reiziger reiziger) {
         try {
-            String q = "SELECT * FROM adres JOIN reiziger ON reiziger.reiziger_id = adres.reiziger_id WHERE reiziger.reiziger_id = ?";
+            String q = "SELECT * FROM adres WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1,reiziger.getId());
             ResultSet rs = pst.executeQuery();
+            Adres adres = null;
 
-            int adres_id = rs.getInt(1);
-            String postcode = rs.getString(2);
-            String huisnummer = rs.getString(3);
-            String straat = rs.getString(4);
-            String woonplaats = rs.getString(5);
-            Adres adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger);
-
+            while (rs.next()) {
+                int adres_id = rs.getInt(1);
+                String postcode = rs.getString(2);
+                String huisnummer = rs.getString(3);
+                String straat = rs.getString(4);
+                String woonplaats = rs.getString(5);
+                adres = new Adres(adres_id, postcode, huisnummer, straat, woonplaats, reiziger);
+            }
             pst.close();
             return adres;
 
@@ -116,4 +123,30 @@ public class AdresDAOPsql implements AdresDAO{
             return null;
         }
     }
+
+    @Override
+    public ArrayList<Adres> findAll() throws SQLException {
+        try{
+            Statement myStmt = connection.createStatement();
+            ResultSet rs = myStmt.executeQuery("SELECT * FROM adres");
+            ArrayList<Adres> adressen = new ArrayList<>();
+
+            while (rs.next()){
+                int adresId = rs.getInt("adres_id");
+                String postcode = rs.getString("postcode");
+                String huisnummer = rs.getString("huisnummer");
+                String straat = rs.getString("straat");
+                String woonplaats = rs.getString("woonplaats");
+                int reizigerId = rs.getInt("reiziger_id");
+                adressen.add(new Adres(adresId, postcode, huisnummer, straat, woonplaats, rdao.findById(reizigerId)));
+            }
+        return adressen;
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
