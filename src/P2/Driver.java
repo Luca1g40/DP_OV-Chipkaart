@@ -54,8 +54,8 @@ public class Driver {
         System.out.println("aantal na het aanroepen " + reizigers.size());
         System.out.println();
 
-        System.out.println("[Test] ReizigerDAO.findById(1)");
-        System.out.println(rdp.findById(1));
+        System.out.println("[Test] ReizigerDAO.findById(2)");
+        System.out.println(rdp.findById(2));
         System.out.println();
 
         System.out.println("[Test] ReizigerDAO.findByGbDatum()");

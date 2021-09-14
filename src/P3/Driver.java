@@ -36,6 +36,7 @@ public class Driver {
         rdp.saveReiziger(r1);
         System.out.println();
 
+        System.out.println("Na het opslaan van de nieuwe reiziger");
         ArrayList<Reiziger> reizigers1 = rdp.findAll();
         for (Reiziger reiziger : reizigers1){
             System.out.println(reiziger);
