@@ -1,6 +1,7 @@
-package P3.Domain;
+package P4.Domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Reiziger {
 
@@ -10,6 +11,8 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
     private Adres adres;
+    private ArrayList<OVChipkaart> OVC;
+
 
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
@@ -18,7 +21,16 @@ public class Reiziger {
         this.achternaam = achternaam;
         this.tussenvoegsel = tussenvoegsel;
         this.geboortedatum = geboortedatum;
+        this.OVC = new ArrayList<>();
     }
+
+    public ArrayList<OVChipkaart> getOVC() {
+        return OVC;
+    }
+
+   public void addOvCard(OVChipkaart ov){
+        OVC.add(ov);
+   }
 
     public Adres getAdres() {
         return adres;
@@ -74,22 +86,22 @@ public class Reiziger {
         if (adres == null){
             if (tussenvoegsel == null){
                 return "Reiziger " + voorletters + " " + achternaam + " met reizigers id: " +  id
-                        + " geboortedatum " + geboortedatum;
+                        + " geboortedatum " + geboortedatum + " " +  OVC;
             }
             else{
                 return "Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
-                        + " geboortedatum " + geboortedatum;
+                        + " geboortedatum " + geboortedatum + " " +  OVC;
             }
 
         }
         else {
             if (tussenvoegsel == null){
-                    return "Reiziger " + voorletters + " " + achternaam + " met reizigers id: " +  id
-                    + " geboortedatum " + geboortedatum + " " + adres;
-        }
+                return "Reiziger " + voorletters + " " + achternaam + " met reizigers id: " +  id
+                        + " geboortedatum " + geboortedatum + " " + adres + " " +  OVC;
+            }
             else {
                 return "Reiziger " + voorletters + " " + tussenvoegsel + " " + achternaam + " met reizigers id: " +  id
-                        + " geboortedatum " + geboortedatum + " " + adres;
+                        + " geboortedatum " + geboortedatum + " " + adres + " " +  OVC;
             }
         }
     }

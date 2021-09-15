@@ -1,9 +1,11 @@
-package P3;
+package P4;
 
-import P3.Domain.Reiziger;
-import P3.DAO.AdresDAOPsql;
-import P3.DAO.ReizigerDAOPsql;
-import P3.Domain.Adres;
+import P4.DAO.AdresDAOPsql;
+import P4.DAO.OVChipkaartDAOPsql;
+import P4.DAO.ReizigerDAOPsql;
+import P4.Domain.Adres;
+import P4.Domain.OVChipkaart;
+import P4.Domain.Reiziger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,18 +20,28 @@ public class Driver {
         connection = DriverManager.getConnection("jdbc:postgresql:ovchip", "postgres", "1234");
         AdresDAOPsql adp = new AdresDAOPsql(connection);
         ReizigerDAOPsql rdp = new ReizigerDAOPsql(connection);
+        OVChipkaartDAOPsql odp = new OVChipkaartDAOPsql(connection);
 
         adp.setRdao(rdp);
         rdp.setAdao(adp);
+        rdp.setOvdao(odp);
+        odp.setRdao(rdp);
+
 
 
         String gbdatum = "1993-03-27";
 
         Reiziger r1 = new Reiziger(7, "L", "", "Fransen", java.sql.Date.valueOf(gbdatum));
-        Adres a1 = new Adres(7, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
+        Adres a1 = new Adres(12, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
+        OVChipkaart ov1 = new OVChipkaart(8, java.sql.Date.valueOf("2000-05-25"), 1, 24.0, r1);
+
         rdp.saveReiziger(r1);
-        a1.setHuisnummer("135A");
-        adp.updateAdres(a1);
+//        adp.saveAdres(a1);
+//        a1.setHuisnummer("135A");
+//        adp.updateAdres(a1);
+//        adp.deleteAdres(a1);
+
+
 
         ArrayList<Reiziger> reizigers = rdp.findAll();
         for (Reiziger reiziger : reizigers){
@@ -49,13 +61,6 @@ public class Driver {
         System.out.println(rdp.findAll().size());
         rdp.deleteReiziger(r1);
         System.out.println(rdp.findAll().size());
-        System.out.println();
-
-        System.out.println("[Test] AdresDAO.findById(7) Adres van r1 - bestaat niet");
-        System.out.println(r1.getAdres());
-        System.out.println(adp.findAll().contains(r1.getAdres()));
-
-
 
 
 

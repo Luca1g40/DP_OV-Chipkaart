@@ -1,7 +1,8 @@
-package P3.DAO;
+package P4.DAO;
 
-import P3.Domain.Reiziger;
-import P3.Domain.Adres;
+import P4.Domain.Adres;
+import P4.Domain.OVChipkaart;
+import P4.Domain.Reiziger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
     private Connection connection;
     private AdresDAO adao;
+    private OVChipkaartDAO ovdao;
 
     public ReizigerDAOPsql(Connection connection){
         this.connection = connection;
@@ -17,6 +19,10 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
     public void setAdao(AdresDAO adao) {
         this.adao = adao;
+    }
+
+    public void setOvdao(OVChipkaartDAO ovdao) {
+        this.ovdao = ovdao;
     }
 
     @Override
@@ -40,8 +46,14 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pst.execute();
             pst.close();
             Adres adres = reiziger.getAdres();
+            ArrayList<OVChipkaart> allCards = reiziger.getOVC();
             if (adres != null){
                 adao.saveAdres(adres);
+            }
+            if (allCards.size() > 0){
+                for (OVChipkaart ov : allCards){
+                    ovdao.saveOVChipkaart(ov);
+                }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,12 +80,17 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pst.setString(3, achternaam);
             pst.setDate(4, geboortedatum);
             pst.setInt(5, id);
-            pst.setInt(6,id);
+            pst.setInt(6, id);
             Adres adres = reiziger.getAdres();
+            ArrayList<OVChipkaart> allCards = reiziger.getOVC();
             if(adres != null){
                 adao.updateAdres(adres);
             }
-
+            if (allCards.size() > 0){
+                for (OVChipkaart ov : allCards){
+                    ovdao.updateOVChopkaart(ov);
+                }
+            }
             pst.execute();
             pst.close();
 
@@ -91,9 +108,16 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1, reiziger.getId());
             Adres adres = reiziger.getAdres();
+            ArrayList<OVChipkaart> allCards = reiziger.getOVC();
             if (adres != null){
                 adao.deleteAdres(adres);
             }
+            if (allCards.size() > 0){
+                for (OVChipkaart ov : allCards){
+                    ovdao.deleteOVChipkaart(ov);
+                }
+            }
+
             pst.execute();
             pst.close();
 
@@ -118,8 +142,9 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                 String tussenvoegsel = rs.getString("tussenvoegsel");
                 Date geboortedatum = rs.getDate("geboortedatum");
                 int reizigerid = rs.getInt("reiziger_id");
-                Reiziger reiziger = new Reiziger(reizigerid, naam, tussenvoegsel, achternaam, geboortedatum);
+                Reiziger reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
                 reiziger.setAdres(adao.findByReiziger(reiziger));
+                ovdao.findByReiziger(reiziger);
                 reizigers.add(reiziger);
 
             }
@@ -150,6 +175,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                 int reizigerid = rs.getInt("reiziger_id");
                 reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
                 reiziger.setAdres(adao.findByReiziger(reiziger));
+                ovdao.findByReiziger(reiziger);
+
             }
             pst.close();
             return reiziger;
@@ -177,6 +204,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             int reizigerid = rs.getInt("reiziger_id");
             Reiziger reiziger = new Reiziger(reizigerid, naam, tussenvoegsel, achternaam, geboortedatum);
             reiziger.setAdres(adao.findByReiziger(reiziger));
+            ovdao.findByReiziger(reiziger);
+
             reizigers.add(reiziger);
 
 
