@@ -38,11 +38,11 @@ public class Driver {
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findById() find reiziger by id");
-        System.out.println(rdp.findById(1));
+        System.out.println(rdp.findById(7));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findByGbDatum() find by geboortedatum");
-        System.out.println(rdp.findByGbDatum("2002-09-17"));
+        System.out.println(rdp.findByGbDatum("1993-03-27"));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.deleteReiziger() delete reiziger L Fransen");

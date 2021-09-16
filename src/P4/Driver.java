@@ -34,6 +34,7 @@ public class Driver {
         Reiziger r1 = new Reiziger(7, "L", "", "Fransen", java.sql.Date.valueOf(gbdatum));
         Adres a1 = new Adres(12, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
         OVChipkaart ov1 = new OVChipkaart(8, java.sql.Date.valueOf("2000-05-25"), 1, 24.0, r1);
+        OVChipkaart ov2 = new OVChipkaart(9, java.sql.Date.valueOf("2000-05-25"), 2, 10.0, r1);
 
         rdp.saveReiziger(r1);
 //        adp.saveAdres(a1);
@@ -50,17 +51,23 @@ public class Driver {
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findById() find reiziger by id");
-        System.out.println(rdp.findById(1));
+        System.out.println(rdp.findById(7));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findByGbDatum() find by geboortedatum");
-        System.out.println(rdp.findByGbDatum("2002-09-17"));
+        System.out.println(rdp.findByGbDatum("1993-03-27"));
+
+        System.out.println();
+        System.out.println("[Test] OVChipkaartDAO.deleteCard() Delete card 9");
+        odp.deleteOVChipkaart(ov2);
+        System.out.println(rdp.findById(7));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.deleteReiziger() delete reiziger L Fransen");
         System.out.println(rdp.findAll().size());
         rdp.deleteReiziger(r1);
         System.out.println(rdp.findAll().size());
+
 
 
 
