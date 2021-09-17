@@ -35,14 +35,8 @@ public class Driver {
         Adres a1 = new Adres(12, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
         OVChipkaart ov1 = new OVChipkaart(8, java.sql.Date.valueOf("2000-05-25"), 1, 24.0, r1);
         OVChipkaart ov2 = new OVChipkaart(9, java.sql.Date.valueOf("2000-05-25"), 2, 10.0, r1);
-
+        System.out.println(r1);
         rdp.saveReiziger(r1);
-//        adp.saveAdres(a1);
-//        a1.setHuisnummer("135A");
-//        adp.updateAdres(a1);
-//        adp.deleteAdres(a1);
-
-
 
         ArrayList<Reiziger> reizigers = rdp.findAll();
         for (Reiziger reiziger : reizigers){
@@ -65,7 +59,7 @@ public class Driver {
         System.out.println();
         System.out.println("[Test] ReizigerDAO.deleteReiziger() delete reiziger L Fransen");
         System.out.println(rdp.findAll().size());
-        rdp.deleteReiziger(r1);
+//        rdp.deleteReiziger(r1);
         System.out.println(rdp.findAll().size());
 
 

@@ -107,8 +107,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             String q = "DELETE FROM reiziger adres WHERE reiziger_id = ?";
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1, reiziger.getId());
-            Adres adres = reiziger.getAdres();
-            ArrayList<OVChipkaart> allCards = reiziger.getOVC();
+            Adres adres = adao.findByReiziger(reiziger);
+            ArrayList<OVChipkaart> allCards = ovdao.findByReiziger(reiziger);
             if (adres != null){
                 adao.deleteAdres(adres);
             }
