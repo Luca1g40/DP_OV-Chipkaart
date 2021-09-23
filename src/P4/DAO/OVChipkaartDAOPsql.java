@@ -46,8 +46,10 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
-            return null;
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override
@@ -63,6 +65,9 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -85,12 +90,14 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
             pst.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
 
     @Override
-    public boolean updateOVChopkaart(OVChipkaart ov) {
+    public boolean updateOVChipkaart(OVChipkaart ov) {
         try {
             String q = "UPDATE ov_chipkaart SET " +
                     "kaart_nummer = ?, geldig_tot = ?, klasse = ?, saldo = ?, reiziger_id = ?" +
@@ -107,6 +114,9 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }

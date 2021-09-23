@@ -8,8 +8,10 @@ import P4.Domain.OVChipkaart;
 import P4.Domain.Reiziger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Driver {
@@ -29,14 +31,20 @@ public class Driver {
 
 
 
-        String gbdatum = "1993-03-27";
+        LocalDate date = LocalDate.of(1993,3,27);
 
-        Reiziger r1 = new Reiziger(7, "L", "", "Fransen", java.sql.Date.valueOf(gbdatum));
+        Reiziger r1 = new Reiziger(7, "L", "", "Fransen", Date.valueOf(date));
         Adres a1 = new Adres(12, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
         OVChipkaart ov1 = new OVChipkaart(8, java.sql.Date.valueOf("2000-05-25"), 1, 24.0, r1);
-        OVChipkaart ov2 = new OVChipkaart(9, java.sql.Date.valueOf("2000-05-25"), 2, 10.0, r1);
-        System.out.println(r1);
+
+
         rdp.saveReiziger(r1);
+//        adp.saveAdres(a1);
+//        a1.setHuisnummer("135A");
+//        adp.updateAdres(a1);
+//        adp.deleteAdres(a1);
+
+
 
         ArrayList<Reiziger> reizigers = rdp.findAll();
         for (Reiziger reiziger : reizigers){
@@ -45,23 +53,17 @@ public class Driver {
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findById() find reiziger by id");
-        System.out.println(rdp.findById(7));
+        System.out.println(rdp.findById(1));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.findByGbDatum() find by geboortedatum");
-        System.out.println(rdp.findByGbDatum("1993-03-27"));
-
-        System.out.println();
-        System.out.println("[Test] OVChipkaartDAO.deleteCard() Delete card 9");
-        odp.deleteOVChipkaart(ov2);
-        System.out.println(rdp.findById(7));
+        System.out.println(rdp.findByGbDatum(LocalDate.of(1993,3,27)));
 
         System.out.println();
         System.out.println("[Test] ReizigerDAO.deleteReiziger() delete reiziger L Fransen");
         System.out.println(rdp.findAll().size());
-//        rdp.deleteReiziger(r1);
+        rdp.deleteReiziger(r1);
         System.out.println(rdp.findAll().size());
-
 
 
 

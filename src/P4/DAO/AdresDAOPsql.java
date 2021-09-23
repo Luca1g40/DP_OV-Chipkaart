@@ -25,7 +25,7 @@ public class AdresDAOPsql implements AdresDAO {
         try {
             String q = ("INSERT INTO adres" +
                     " (adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id)" +
-                    "VALUES (?, ?, ? , ? , ?, ?)");
+                    "VALUES (?, ?, ?, ? , ?, ?)");
 
             PreparedStatement pst = connection.prepareStatement(q);
             pst.setInt(1,adres.getAdres_id());
@@ -38,6 +38,8 @@ public class AdresDAOPsql implements AdresDAO {
             pst.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -60,6 +62,8 @@ public class AdresDAOPsql implements AdresDAO {
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -78,24 +82,12 @@ public class AdresDAOPsql implements AdresDAO {
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            return false;
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        return false;
     }
 
-    @Override
-    public Adres findById(Adres adres) {
-        try {
-            String q = "SELECT * FROM adres WHERE reiziger.reiziger_id = ?";
-            PreparedStatement pst = connection.prepareStatement(q);
-            pst.setInt(1,adres.getReiziger().getId());
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return null;
-        }
-
-        return null;
-    }
 
     @Override
     public Adres findByReiziger(Reiziger reiziger) {
@@ -120,8 +112,11 @@ public class AdresDAOPsql implements AdresDAO {
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
-            return null;
+
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override

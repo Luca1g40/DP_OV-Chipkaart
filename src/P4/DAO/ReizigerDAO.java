@@ -3,6 +3,7 @@ package P4.DAO;
 import P4.Domain.Reiziger;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface ReizigerDAO {
@@ -17,5 +18,5 @@ public interface ReizigerDAO {
 
     public Reiziger findById(int id) throws SQLException;
 
-    public ArrayList<Reiziger> findByGbDatum(String datum) throws SQLException;
+    public ArrayList<Reiziger> findByGbDatum(LocalDate datum) throws SQLException;
 }

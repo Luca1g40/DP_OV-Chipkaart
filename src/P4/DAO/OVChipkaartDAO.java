@@ -15,7 +15,7 @@ public interface OVChipkaartDAO {
 
     public boolean saveOVChipkaart(OVChipkaart ov) throws SQLException;
 
-    public boolean updateOVChopkaart(OVChipkaart ov) throws SQLException;
+    public boolean updateOVChipkaart(OVChipkaart ov) throws SQLException;
 
 
 

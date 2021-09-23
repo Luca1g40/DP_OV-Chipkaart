@@ -5,6 +5,7 @@ import P4.Domain.OVChipkaart;
 import P4.Domain.Reiziger;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ReizigerDAOPsql implements ReizigerDAO {
@@ -48,6 +49,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             Adres adres = reiziger.getAdres();
             ArrayList<OVChipkaart> allCards = reiziger.getOVC();
             if (adres != null){
+
                 adao.saveAdres(adres);
             }
             if (allCards.size() > 0){
@@ -57,6 +59,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -88,7 +92,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             }
             if (allCards.size() > 0){
                 for (OVChipkaart ov : allCards){
-                    ovdao.updateOVChopkaart(ov);
+                    ovdao.updateOVChipkaart(ov);
                 }
             }
             pst.execute();
@@ -96,6 +100,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -109,15 +115,17 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pst.setInt(1, reiziger.getId());
             Adres adres = adao.findByReiziger(reiziger);
             ArrayList<OVChipkaart> allCards = ovdao.findByReiziger(reiziger);
+            // Adres verwijderen
             if (adres != null){
                 adao.deleteAdres(adres);
             }
+            // Ov verwijderen
             if (allCards.size() > 0){
                 for (OVChipkaart ov : allCards){
                     ovdao.deleteOVChipkaart(ov);
                 }
             }
-
+            // Query execute DELETE FROM reiziger adres WHERE reiziger_id = ?
             pst.execute();
             pst.close();
 
@@ -125,6 +133,9 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -143,17 +154,22 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                 Date geboortedatum = rs.getDate("geboortedatum");
                 int reizigerid = rs.getInt("reiziger_id");
                 Reiziger reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+                // Reiziger.setAdres zet in de constructor van Adres een reiziger
                 reiziger.setAdres(adao.findByReiziger(reiziger));
+                // FindByReiziger zet in de constructor van de OVchipkaart de reiziger.
+
                 ovdao.findByReiziger(reiziger);
+
                 reizigers.add(reiziger);
 
             }
             rs.close();
             myStmt.close();
             return reizigers;
-        }
-        catch (Exception exc){
-            System.out.println(exc);
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        } catch (Exception exc){
+            exc.printStackTrace();
         }
         return null;
     }
@@ -174,7 +190,9 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                 Date geboortedatum = rs.getDate("geboortedatum");
                 int reizigerid = rs.getInt("reiziger_id");
                 reiziger = new Reiziger(reizigerid, naam, achternaam, tussenvoegsel, geboortedatum);
+                // Reiziger.setAdres zet in de constructor van Adres een reiziger
                 reiziger.setAdres(adao.findByReiziger(reiziger));
+                // FindByReiziger zet in de constructor van de OVchipkaart de reiziger.
                 ovdao.findByReiziger(reiziger);
 
             }
@@ -183,38 +201,43 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
         }catch (SQLException ex){
             ex.printStackTrace();
+        } catch (Exception exc){
+            exc.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public ArrayList<Reiziger> findByGbDatum(String datum) throws SQLException {
+    public ArrayList<Reiziger> findByGbDatum(LocalDate datum) throws SQLException {
         try{
-        String q = "SELECT *  FROM reiziger WHERE geboortedatum = ?";
-        PreparedStatement pst = connection.prepareStatement(q);
-        pst.setDate(1, Date.valueOf(datum));
-        ResultSet rs = pst.executeQuery();
-        ArrayList<Reiziger> reizigers = new ArrayList<>();
+            String q = "SELECT *  FROM reiziger WHERE geboortedatum = ?";
+            PreparedStatement pst = connection.prepareStatement(q);
+            pst.setDate(1, Date.valueOf(datum));
+            ResultSet rs = pst.executeQuery();
+            ArrayList<Reiziger> reizigers = new ArrayList<>();
 
-        while (rs.next()) {
-            String naam = rs.getString("voorletters");
-            String achternaam = rs.getString("achternaam");
-            String tussenvoegsel = rs.getString("tussenvoegsel");
-            Date geboortedatum = rs.getDate("geboortedatum");
-            int reizigerid = rs.getInt("reiziger_id");
-            Reiziger reiziger = new Reiziger(reizigerid, naam, tussenvoegsel, achternaam, geboortedatum);
-            reiziger.setAdres(adao.findByReiziger(reiziger));
-            ovdao.findByReiziger(reiziger);
+            while (rs.next()) {
+                String naam = rs.getString("voorletters");
+                String achternaam = rs.getString("achternaam");
+                String tussenvoegsel = rs.getString("tussenvoegsel");
+                Date geboortedatum = rs.getDate("geboortedatum");
+                int reizigerid = rs.getInt("reiziger_id");
+                Reiziger reiziger = new Reiziger(reizigerid, naam, tussenvoegsel, achternaam, geboortedatum);
+                reiziger.setAdres(adao.findByReiziger(reiziger));
+                // Reiziger.setAdres zet in de constructor van Adres een reiziger
+                ovdao.findByReiziger(reiziger);
+                // FindByReiziger zet in de constructor van de OVchipkaart de reiziger.
+                reizigers.add(reiziger);
 
-            reizigers.add(reiziger);
+            }
 
-
-        }
         return reizigers;
         }
 
         catch (SQLException ex){
             ex.printStackTrace();
+        } catch (Exception exc){
+            exc.printStackTrace();
         }
         return null;
     }
