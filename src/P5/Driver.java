@@ -1,11 +1,11 @@
-package P4;
+package P5;
 
-import P4.DAO.AdresDAOPsql;
-import P4.DAO.OVChipkaartDAOPsql;
-import P4.DAO.ReizigerDAOPsql;
-import P4.Domain.Adres;
-import P4.Domain.OVChipkaart;
-import P4.Domain.Reiziger;
+import P5.DAO.AdresDAOPsql;
+import P5.DAO.OVChipkaartDAOPsql;
+import P5.DAO.ReizigerDAOPsql;
+import P5.Domain.Adres;
+import P5.Domain.OVChipkaart;
+import P5.Domain.Reiziger;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -35,7 +35,7 @@ public class Driver {
 
         Reiziger r1 = new Reiziger(7, "L", "", "Fransen", Date.valueOf(date));
         Adres a1 = new Adres(12, "3732BE", "153", "Henrica van erpweg", "De Bilt", r1);
-        OVChipkaart ov1 = new OVChipkaart(8, java.sql.Date.valueOf("2000-05-25"), 1, 24.0, r1);
+        OVChipkaart ov1 = new OVChipkaart(8, Date.valueOf("2000-05-25"), 1, 24.0, r1);
 
 
         System.out.println(odp.findAll());

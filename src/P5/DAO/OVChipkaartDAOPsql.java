@@ -1,14 +1,12 @@
-package P4.DAO;
+package P5.DAO;
 
-import P4.Domain.Adres;
-import P4.Domain.OVChipkaart;
-import P4.Domain.Reiziger;
+import P5.Domain.OVChipkaart;
+import P5.Domain.Reiziger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
-public class OVChipkaartDAOPsql implements OVChipkaartDAO{
+public class OVChipkaartDAOPsql implements OVChipkaartDAO {
 
     private Connection connection;
     private ReizigerDAO rdao;
@@ -20,7 +18,6 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
     public void setRdao(ReizigerDAO rdao) {
         this.rdao = rdao;
     }
-
 
 
     @Override
