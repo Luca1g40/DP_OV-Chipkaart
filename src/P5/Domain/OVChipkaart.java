@@ -4,35 +4,33 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class OVChipkaart {
-    private int kaart_nummer;
+    private int kaartNummer;
     private Date geldigTot;
     private int klasse;
     private double saldo;
     private Reiziger reiziger;
     private ArrayList<Product> products;
 
-    public OVChipkaart(int kaart_nummer, Date geldigTot, int klasse, double saldo, Reiziger reiziger) {
-        this.kaart_nummer = kaart_nummer;
+    public OVChipkaart(int kaartNummer, Date geldigTot, int klasse, double saldo, Reiziger reiziger) {
+        this.kaartNummer = kaartNummer;
         this.geldigTot = geldigTot;
         this.klasse = klasse;
         this.saldo = saldo;
         this.reiziger = reiziger;
         reiziger.addOvCard(this);
         this.products = new ArrayList<>();
-
     }
 
-    //add producti - voeg producttie toe en set status set date.
-
-    //upodate productii - set status, date dingen.
-
-
-    public int getKaart_nummer() {
-        return kaart_nummer;
+    public void addProduct(Product product){
+        products.add(product);
     }
 
-    public void setKaart_nummer(int kaart_nummer) {
-        this.kaart_nummer = kaart_nummer;
+    public int getKaartNummer() {
+        return kaartNummer;
+    }
+
+    public void setKaartNummer(int kaartNummer) {
+        this.kaartNummer = kaartNummer;
     }
 
     public Date getGeldigTot() {
@@ -55,6 +53,10 @@ public class OVChipkaart {
         return saldo;
     }
 
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
@@ -69,12 +71,7 @@ public class OVChipkaart {
 
     @Override
     public String toString() {
-        return "OVChipkaart{" +
-                "Kaart nummer: " + kaart_nummer +
-                ", geldigTot :" + geldigTot +
-                ", klasse: " + klasse +
-                ", saldo: " + saldo +
-                '}';
+        return kaartNummer + " " + geldigTot + " " + klasse + " " + saldo + " " + products;
     }
 }
 

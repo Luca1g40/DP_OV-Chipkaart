@@ -7,18 +7,18 @@ public class Product {
     private int productNummer;
     private String naam;
     private String beschrijving;
-    private int prijs;
-    private ArrayList<OVChipkaart> ovCards;
-    private String status;
-    private Date lastUpdate;
+    private double prijs;
+    private ArrayList<Integer> ovIdnummer;
 
-    public Product(int productNummer, String naam, String beschrijving, int prijs) {
+    public Product(int productNummer, String naam, String beschrijving, double prijs) {
         this.productNummer = productNummer;
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.prijs = prijs;
-        this.ovCards = new ArrayList<>();
+        this.ovIdnummer = new ArrayList<>();
     }
+
+
 
     public int getProductNummer() {
         return productNummer;
@@ -44,7 +44,7 @@ public class Product {
         this.beschrijving = beschrijving;
     }
 
-    public int getPrijs() {
+    public double getPrijs() {
         return prijs;
     }
 
@@ -52,27 +52,15 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public ArrayList<OVChipkaart> getOvCards() {
-        return ovCards;
+    public ArrayList<Integer> getOvCardnummers() {
+        return ovIdnummer;
     }
 
-    public void setOvCards(ArrayList<OVChipkaart> ovCards) {
-        this.ovCards = ovCards;
+    public void addOvChipkaar(int kaartnummer){
+        ovIdnummer.add(kaartnummer);
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public String toString(){
+        return "productnummer " + productNummer;
     }
 }
