@@ -124,6 +124,8 @@ public class ProductDAOPSql implements ProductDAO{
 
     @Override
     public ArrayList<Product> findAll() throws SQLException {
+        try{
+
         ArrayList<Product> products = new ArrayList<>();
         String q = "SELECT * FROM product";
         PreparedStatement pst = connection.prepareStatement(q);
@@ -148,42 +150,58 @@ public class ProductDAOPSql implements ProductDAO{
             }
         }
             return products;
+        }catch (SQLException sqlException){
+            sqlException.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
+    }
 
     @Override
     public ArrayList<Product> findByOvchipkaart(OVChipkaart ovChipkaart) throws SQLException {
-        String q = "SELECT * FROM ov_chipkaart\n" +
-                "JOIN ov_chipkaart_product ON ov_chipkaart.kaart_nummer = ov_chipkaart_product.kaart_nummer\n" +
-                "JOIN product ON product.product_nummer = ov_chipkaart_product.product_nummer\n" +
-                "WHERE ov_chipkaart.kaart_nummer = ?";
-        PreparedStatement pst = connection.prepareStatement(q);
-        pst.setInt(1, ovChipkaart.getKaartNummer());
-        ResultSet rs = pst.executeQuery();
-        ArrayList<Product> products = new ArrayList<>();
-        while(rs.next()){
-            int productNummer = rs.getInt("product_nummer");
-            String naam = rs.getString("naam");
-            String beschrijving = rs.getString("beschrijving");
-            double prijs = rs.getDouble("prijs");
-            Product product = new Product(productNummer, naam, beschrijving, prijs);
 
-            String q3 = "SELECT ov_chipkaart_product.kaart_nummer FROM product " +
-                    "JOIN ov_chipkaart_product ON product.product_nummer = ov_chipkaart_product.product_nummer " +
-                    "where product.product_nummer = ?";
-            PreparedStatement ps3 = connection.prepareStatement(q3);
-            ps3.setInt(1, productNummer);
-            ResultSet rs3 = ps3.executeQuery();
-            while (rs3.next()){
-                int kaart_nummer = rs3.getInt("kaart_nummer");
-                if (!product.getOvCardnummers().contains(kaart_nummer)){
-                    product.addOvChipkaar(kaart_nummer);
+        try{
+            String q = "SELECT * FROM ov_chipkaart\n" +
+                    "JOIN ov_chipkaart_product ON ov_chipkaart.kaart_nummer = ov_chipkaart_product.kaart_nummer\n" +
+                    "JOIN product ON product.product_nummer = ov_chipkaart_product.product_nummer\n" +
+                    "WHERE ov_chipkaart.kaart_nummer = ?";
+            PreparedStatement pst = connection.prepareStatement(q);
+            pst.setInt(1, ovChipkaart.getKaartNummer());
+            ResultSet rs = pst.executeQuery();
+            ArrayList<Product> products = new ArrayList<>();
+            while(rs.next()){
+                int productNummer = rs.getInt("product_nummer");
+                String naam = rs.getString("naam");
+                String beschrijving = rs.getString("beschrijving");
+                double prijs = rs.getDouble("prijs");
+                Product product = new Product(productNummer, naam, beschrijving, prijs);
+
+                String q3 = "SELECT ov_chipkaart_product.kaart_nummer FROM product " +
+                        "JOIN ov_chipkaart_product ON product.product_nummer = ov_chipkaart_product.product_nummer " +
+                        "where product.product_nummer = ?";
+                PreparedStatement ps3 = connection.prepareStatement(q3);
+                ps3.setInt(1, productNummer);
+                ResultSet rs3 = ps3.executeQuery();
+                while (rs3.next()){
+                    int kaart_nummer = rs3.getInt("kaart_nummer");
+                    if (!product.getOvCardnummers().contains(kaart_nummer)){
+                        product.addOvChipkaar(kaart_nummer);
+                    }
                 }
-            }
-            ps3.close();
-            rs3.close();
+                ps3.close();
+                rs3.close();
 
-            products.add(product);
+                products.add(product);
+            }
+            return products;
+        }catch (SQLException sqlException){
+            sqlException.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        return products;
     }
 }
